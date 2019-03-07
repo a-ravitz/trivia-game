@@ -115,16 +115,16 @@ $(document).ready(function() {
         var dataAnswer = ($(this).attr("data-answer"));
         if (questions[number].correctAnswer === dataAnswer) {
                 wins++
-                number++
                 console.log("ok!")
         } else {
-                losses++  
-                number++      
+                losses++      
         }
+            number++
         console.log(wins);
         console.log(losses);
         console.log(number);
         console.log(dataAnswer);
         console.log(questions[number]);
     });
+
 });
