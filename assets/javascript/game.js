@@ -1,23 +1,8 @@
 $(document).ready(function() {
-  /*
-1. make a container that will hold trivia game
-2. make a button that starts the game 
-    -when you click the button the game will begin. 
-    -a timer will start counting down and you'll have 30 seconds to answer a question 
-3. create an array, or a collection  of questoins based on a theme 
-4. create an array of possible answers to the question
-    -one will prove true
-    -three will prove false 
-5. scoring
-    -if you run out of time you lose: losses++, a new question is loaded and the timer begins again 
-    -if you guess the wrong answer you lose: losses++, a new question is loaded and the timer begins again 
-    -if you guess the right answer you win: wins++, a new question is loaded and the timer begins again
-
-*/
 
   var questions = [
     {
-      Question: "what is Whoopi Goldberg's character name aboard the ship?",
+      Question: "What is Whoopi Goldberg's character name aboard the ship?",
 
       Answers: {
         a: "Guinan",
@@ -29,7 +14,7 @@ $(document).ready(function() {
     },
     {
       Question:
-        "what instrument does Captain Picard play in the episoide The Inner Light?",
+        "What instrument does Captain Picard play in the episoide The Inner Light?",
 
       Answers: {
         a: "Bass clarinet",
@@ -40,7 +25,7 @@ $(document).ready(function() {
       correctAnswer: "Ressikan flute"
     },
     {
-      Question: "what is Data's evil twins name?",
+      Question: "What is Data's evil twins name?",
 
       Answers: {
         a: "La Forge",
@@ -51,7 +36,7 @@ $(document).ready(function() {
       correctAnswer: "Lore"
     },
     {
-      Question: "who does Captain Picard refer to as #1?",
+      Question: "Who does Captain Picard refer to as #1?",
 
       Answers: {
         a: "Alexander Rozhenko",
@@ -95,7 +80,7 @@ $(document).ready(function() {
       correctAnswer: "Rachel Garrett"
     },
     {
-      Question: "Darmok and Jalad... at Tanagra",
+      Question: "Darmok and Jalad...",
 
       Answers: {
         a: "at Scoomada",
@@ -129,9 +114,15 @@ $(document).ready(function() {
     }
   ]
   var wins = 0;
+  $("#wins").css("display", "none")
   var losses = 0;
+  $("#losses").css("display", "none")
   var number = 0; //variable stores the question number 
   var answers = [];
+  var buttonId = ["btn1", "btn2", "btn3", "btn4", "btn5"]
+  $("#display").css("display", "none")
+  var timeout = false; 
+
         function button() {
 
       answers = Object.values(questions[number].Answers);
@@ -141,15 +132,17 @@ $(document).ready(function() {
 
                 var questionButton = $("<button>");
                     questionButton
-                        .addClass("btn btn-primary btn-answer")
+                        .addClass("btn btn-answer")
                         .text(answers[i])
-                        .attr("data-answer", answers[i]);
+                        .attr("data-answer", answers[i])
+                        .attr("id", buttonId[i]);
                     $("#buttons").append(questionButton);
                     console.log(answers[i]);
             }
                     $(".btn-answer").on("click", function() {
                       var dataAnswer = ($(this).attr("data-answer"));
-              
+                      
+                    if (number !== 9) {
                       if (questions[number].correctAnswer === dataAnswer) {
                               clearInterval(timer);
                               resetWin();
@@ -160,56 +153,67 @@ $(document).ready(function() {
                               resetLose();
                               console.log("bummer!")
                       }
-                    
+                    } else {
+                      gameOver()
+                      $("#buttons").empty();
+                    }  
 
             });
           
         }
-        
-      
             var startButton = $("<button>")
             startButton 
-                .addClass("btn btn-primary btn-start")
-                .text("click here to start")
-                .attr("id", "strtBtn")
+                .addClass("btn btn-start")
+                .text("ENGAGE")
+                .attr("id", buttonId[4])
                 $("#start").append(startButton);
 
             $(".btn-start").on("click", function(event) {
               event.preventDefault()
-              $("#strtBtn").css("display", "none");
+              $("#btn5").css("display", "none");
+              $("#display").css("display", "block")
               $("#losses").text("Losses: " + losses);
               $("#wins").text("Wins: " + wins);
               button()
               clock = 31;
               runClock()
             }); 
-            console.log(number)
             
+
+        function gameOver () {
+          $("#display").css("display", "none");
+          $("#questions").css("display", "none")
+          $("#losses").css("display", "block")
+          $("#losses").text("Incorrect: " + losses);
+          $("#wins").css("display", "block")
+          $("#wins").text("Correct: " + wins);
+          $(".questBtn").css("display","none")
+        }
+
         function resetWin () {
             $("#buttons").empty();
             $("#display").empty();
             clearInterval(timer);
             wins++;
-            $("#wins").text("Wins: " + wins);
             number++;
             console.log(number);
             clock = 31;
             button()
             runClock()
         }
+        
         function resetLose () {
             $("#buttons").empty();
             $("#display").empty();
             clearInterval(timer);
             losses++
-            $("#losses").text("Losses: " + losses);
             number++;
             console.log(number);
             clock = 31;
             button()
             runClock()
         }
-            
+      
             var timer;
             var clock = 31;
         function countDown() {
@@ -220,6 +224,7 @@ $(document).ready(function() {
                     resetLose();
                 };
         };
+
         function runClock() {
             timer = setInterval(countDown, 1000);
         }; 
@@ -230,9 +235,7 @@ $(document).ready(function() {
 
 });
 
-/*
-
-.remove() - completly removes everything 
+/*g 
 
 one function called buttons. this function will generate the buttons, 
 append the question to the dom and be reloaded with a new question each time 

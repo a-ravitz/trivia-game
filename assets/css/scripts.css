@@ -1,0 +1,96 @@
+body {
+    background-image: url("../images/Lcars_wallpaper.gif");
+    font-family: 'Roboto', sans-serif;
+    color: #fe9800;
+    position: relative;
+}
+
+#btn1 {
+    background-color: #9b98fe;
+    color: black;
+    font-weight: bold;
+    margin: 10px;
+}
+#btn2 {
+    background-color: #fe9800;
+    color: black;
+    font-weight: bold;
+    margin: 10px;
+}
+#btn3 {
+    background-color: #c498c4;
+    color: black;
+    font-weight: bold;
+    margin: 10px;
+}
+#btn4 {
+    background-color: #cc6061;
+    color: black;
+    font-weight: bold;
+    margin: 10px;
+}
+#btn5 {
+    background-color: #cc6061;
+    color: white;   
+    height: 100px;
+    width: 120px;
+}
+
+.blink {
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    }
+    
+    @keyframes blinker {
+    0%{opacity: 1.0}
+    50%{opacity: 0.0}
+    100%{opacity: 1.0}
+    }
+
+.flash {
+    background-color: #ec0d0f;
+    animation: flash linear 1s infinite;
+    }
+    @keyframes flash {
+    0% { opacity: 1; } 
+    50% { opacity: .1; } 
+    100% { opacity: 1; }
+    }
+
+.questBtn {
+    position: aboslute;
+    top: 440px;
+    left: 260px;
+    width: 330px;
+    background-color: white;
+}
+.strtBtn {
+    position: absolute; 
+    background-color: transparent;
+    top: 350px;
+    left: 1px;
+}
+.quest {
+    position: absolute;
+    top: 360px;
+    left: 385px;
+    width: 380px;
+    background-color: transparent;
+}
+.disp {
+    position: absolute;
+    top: 280px;
+    left: 200px;
+    font-size: 30px;
+    background-color: transparent;
+    color:white;
+}
+.score {
+    position: absolute;
+    top: 350px;
+    left: 390px;
+    font-size: 25px;
+    background-color: black;
+}
