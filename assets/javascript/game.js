@@ -121,8 +121,9 @@ $(document).ready(function () {
   var answers = [];
   var buttonId = ["btn1", "btn2", "btn3", "btn4", "btn5"]
   $("#display").css("display", "none")
-  
-
+  $(".message").text("Press Engage to Begin")
+  $(".message").css("font-size", "20px")
+  //this function dynamically creates the buttons, manages the scoring, and displays the correct answer if you guess wrong
   function button() {
     if (number !== 10) {
       answers = Object.values(questions[number].Answers);
@@ -141,7 +142,6 @@ $(document).ready(function () {
       }
       $(".btn-answer").on("click", function () {
         var dataAnswer = ($(this).attr("data-answer"));
-
 
         if (questions[number].correctAnswer === dataAnswer) {
           wins++;
@@ -167,9 +167,9 @@ $(document).ready(function () {
     } else {
       gameOver()
     }
-
-
   }
+
+  // the start button
   var startButton = $("<button>")
   startButton
     .addClass("btn btn-start")
@@ -177,18 +177,34 @@ $(document).ready(function () {
     .attr("id", buttonId[4])
   $("#start").append(startButton);
 
+  // when you click start the button goes away and the game begins. it fires button() at question[0] and the game starts 
   $(".btn-start").on("click", function (event) {
     event.preventDefault()
     $("#btn5").css("display", "none");
     $("#display").css("display", "block")
     $("#losses").text("Losses: " + losses);
     $("#wins").text("Wins: " + wins);
+    $(".message").empty();
     button()
     clock = 31;
     runClock()
   });
 
-
+/*this function gets called after the setTimeout happens, it resets the fields and displays a new question by 
+raising the variable number by one, then it launches the button() and the next question appears */
+  function reset() {
+    $("#buttons").empty();
+    $("#display").empty();
+    $(".questBtn").css("display", "block")
+    $(".message").empty();
+    clearInterval(timer);
+    number++;
+    console.log(number);
+    clock = 31;
+    button()
+    runClock()
+  }
+// this function runs when the game has ended, it displays your score and a message
   function gameOver() {
     $("#display").css("display", "none");
     $("#questions").css("display", "none")
@@ -197,6 +213,7 @@ $(document).ready(function () {
     $("#wins").css("display", "block")
     $("#wins").text("Correct: " + wins);
     $(".questBtn").css("display", "none")
+    $(".message").css("font-size", "27px")
     if (wins === 10) {
       $(".message").append("<h2>Congratulations, you've earned the rank of Admiral!</h2>")
     } else if (wins === 10) {
@@ -224,19 +241,7 @@ $(document).ready(function () {
     }
   }
 
-  function reset() {
-    $("#buttons").empty();
-    $("#display").empty();
-    $(".questBtn").css("display", "block")
-    $(".message").empty();
-    clearInterval(timer);
-    number++;
-    console.log(number);
-    clock = 31;
-    button()
-    runClock()
-  }
-
+  //timer stuff 
   var timer;
   var clock = 31;
   function countDown() {
@@ -260,16 +265,3 @@ $(document).ready(function () {
 
 
 });
-
-/*g
-
-one function called buttons. this function will generate the buttons,
-append the question to the dom and be reloaded with a new question each time
-the round ends
-
-one function called start. this will hold the onclick event for starting the game,
-begin the count down timer and take care of the scoring
-
-one function called reset. this will be called at the end of each round,
-it will raise the var number by 1, which will trigger a new question and set of answers,
-it will push score information to the DOM, and restart the timer */
