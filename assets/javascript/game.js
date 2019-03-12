@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
   var questions = [
     {
@@ -67,7 +67,7 @@ $(document).ready(function() {
         d: "Katherine Pulaski"
       },
       correctAnswer: "Zefram Cochrane"
-    },  
+    },
     {
       Question: "In episode 63, Yesterday's Enterprise, who is the captain of the Enterprise C?",
 
@@ -75,7 +75,7 @@ $(document).ready(function() {
         a: "Benjamin Sisko",
         b: "Rachel Garrett",
         c: "James Kirk",
-        d: "Tasha Yrr"
+        d: "Tasha Yar"
       },
       correctAnswer: "Rachel Garrett"
     },
@@ -121,129 +121,155 @@ $(document).ready(function() {
   var answers = [];
   var buttonId = ["btn1", "btn2", "btn3", "btn4", "btn5"]
   $("#display").css("display", "none")
-  var timeout = false; 
+  
 
-        function button() {
-
+  function button() {
+    if (number !== 10) {
       answers = Object.values(questions[number].Answers);
-        $("#questions").text(questions[number].Question);
+      $("#questions").text(questions[number].Question);
 
-            for (var i = 0; i < answers.length; i++) {
+      for (var i = 0; i < answers.length; i++) {
 
-                var questionButton = $("<button>");
-                    questionButton
-                        .addClass("btn btn-answer")
-                        .text(answers[i])
-                        .attr("data-answer", answers[i])
-                        .attr("id", buttonId[i]);
-                    $("#buttons").append(questionButton);
-                    console.log(answers[i]);
-            }
-                    $(".btn-answer").on("click", function() {
-                      var dataAnswer = ($(this).attr("data-answer"));
-                      
-                    if (number !== 9) {
-                      if (questions[number].correctAnswer === dataAnswer) {
-                              clearInterval(timer);
-                              resetWin();
-                              console.log("ok!")
+        var questionButton = $("<button>");
+        questionButton
+          .addClass("btn btn-answer")
+          .text(answers[i])
+          .attr("data-answer", answers[i])
+          .attr("id", buttonId[i]);
+        $("#buttons").append(questionButton);
+        console.log(answers[i]);
+      }
+      $(".btn-answer").on("click", function () {
+        var dataAnswer = ($(this).attr("data-answer"));
 
-                      } else  {
-                              clearInterval(timer);
-                              resetLose();
-                              console.log("bummer!")
-                      }
-                    } else {
-                      gameOver()
-                      $("#buttons").empty();
-                    }  
 
-            });
-          
-        }
-            var startButton = $("<button>")
-            startButton 
-                .addClass("btn btn-start")
-                .text("ENGAGE")
-                .attr("id", buttonId[4])
-                $("#start").append(startButton);
+        if (questions[number].correctAnswer === dataAnswer) {
+          wins++;
+          clearInterval(timer);
+          $("#display").empty();
+          $(".questBtn").css("display", "none")
+          $(".message").text("Great Job")
+          setTimeout(function() {reset()}, 1500);
+          console.log("ok!")
 
-            $(".btn-start").on("click", function(event) {
-              event.preventDefault()
-              $("#btn5").css("display", "none");
-              $("#display").css("display", "block")
-              $("#losses").text("Losses: " + losses);
-              $("#wins").text("Wins: " + wins);
-              button()
-              clock = 31;
-              runClock()
-            }); 
-            
-
-        function gameOver () {
-          $("#display").css("display", "none");
-          $("#questions").css("display", "none")
-          $("#losses").css("display", "block")
-          $("#losses").text("Incorrect: " + losses);
-          $("#wins").css("display", "block")
-          $("#wins").text("Correct: " + wins);
-          $(".questBtn").css("display","none")
+        } else {
+          losses++;
+          clearInterval(timer);
+          $("#display").empty();
+          $(".questBtn").css("display", "none")
+          $(".message").css("font-size", "20px")
+          $(".message").text("The correct answer is: "+ questions[number].correctAnswer)
+          setTimeout(function() {reset()}, 1500);
+          console.log("bummer!")  
         }
 
-        function resetWin () {
-            $("#buttons").empty();
-            $("#display").empty();
-            clearInterval(timer);
-            wins++;
-            number++;
-            console.log(number);
-            clock = 31;
-            button()
-            runClock()
-        }
-        
-        function resetLose () {
-            $("#buttons").empty();
-            $("#display").empty();
-            clearInterval(timer);
-            losses++
-            number++;
-            console.log(number);
-            clock = 31;
-            button()
-            runClock()
-        }
-      
-            var timer;
-            var clock = 31;
-        function countDown() {
-                clock--;
-                $("#display").html(clock);
-                if (clock === 0) {
-                    clearInterval(timer);
-                    resetLose();
-                };
-        };
+      });
+    } else {
+      gameOver()
+    }
 
-        function runClock() {
-            timer = setInterval(countDown, 1000);
-        }; 
-        
 
-        
+  }
+  var startButton = $("<button>")
+  startButton
+    .addClass("btn btn-start")
+    .text("ENGAGE")
+    .attr("id", buttonId[4])
+  $("#start").append(startButton);
+
+  $(".btn-start").on("click", function (event) {
+    event.preventDefault()
+    $("#btn5").css("display", "none");
+    $("#display").css("display", "block")
+    $("#losses").text("Losses: " + losses);
+    $("#wins").text("Wins: " + wins);
+    button()
+    clock = 31;
+    runClock()
+  });
+
+
+  function gameOver() {
+    $("#display").css("display", "none");
+    $("#questions").css("display", "none")
+    $("#losses").css("display", "block")
+    $("#losses").text("Incorrect: " + losses);
+    $("#wins").css("display", "block")
+    $("#wins").text("Correct: " + wins);
+    $(".questBtn").css("display", "none")
+    if (wins === 10) {
+      $(".message").append("<h2>Congratulations, you've earned the rank of Admiral!</h2>")
+    } else if (wins === 10) {
+      $(".message").append("<h2>Congratulations, you've earned the rank of Captain</h2>")
+    } else if (wins === 9) {
+      $(".message").append("<h2>Congratulations, you've earned the rank of Lieutenant Commander</h2>")
+    } else if (wins === 8) {
+      $(".message").append("<h2>Congratulations, you've earned the rank of Lieutenant</h2>")
+    } else if (wins === 7) {
+      $(".message").append("<h2>You've earned the rank of Lieutenant Junior Grade</h2>")
+    } else if (wins === 6) {
+      $(".message").append("<h2>You've earned the rank of Ensign</h2>")
+    } else if (wins === 5) {
+      $(".message").append("<h2>You've earned the rank of Petty Officer</h2>")
+    } else if (wins === 4) {
+      $(".message").append("<h2>You've earned the rank of Wesley Crusher's babysitter</h2>")
+    } else if (wins === 3) {
+      $(".message").append("<h2>You've earned the rank of space janitor </h2>")
+    } else if (wins === 2) {
+      $(".message").append("<h2>You should go back to Daystrom Institute and study more</h2>")
+    } else if (wins === 1) {
+      $(".message").append("<h2>What happened? Did you teleport your brains out!?</h2>")
+    } else  {
+      $(".message").append("<h2>You should get assimilated</h2>")
+    }
+  }
+
+  function reset() {
+    $("#buttons").empty();
+    $("#display").empty();
+    $(".questBtn").css("display", "block")
+    $(".message").empty();
+    clearInterval(timer);
+    number++;
+    console.log(number);
+    clock = 31;
+    button()
+    runClock()
+  }
+
+  var timer;
+  var clock = 31;
+  function countDown() {
+    clock--;
+    $("#display").html(clock);
+    if (clock === 0) {
+      $("#display").empty();
+      $(".questBtn").css("display", "none")
+      $(".message").css("font-size", "20px")
+      $(".message").text("Click any slower and you'll get assimilated!")
+      setTimeout(function() {reset()}, 1500);
+    };
+  };
+
+  function runClock() {
+    timer = setInterval(countDown, 1000);
+  };
+
+
+
 
 
 });
 
-/*g 
+/*g
 
-one function called buttons. this function will generate the buttons, 
-append the question to the dom and be reloaded with a new question each time 
+one function called buttons. this function will generate the buttons,
+append the question to the dom and be reloaded with a new question each time
 the round ends
 
 one function called start. this will hold the onclick event for starting the game,
 begin the count down timer and take care of the scoring
 
-one function called reset. this will be called at the end of each round, 
-it will raise the var number by 1, which will trigger a new question and set of answers, 
+one function called reset. this will be called at the end of each round,
+it will raise the var number by 1, which will trigger a new question and set of answers,
 it will push score information to the DOM, and restart the timer */
